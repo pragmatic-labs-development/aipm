@@ -1,16 +1,32 @@
 ---
-title: 'First post'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jul 08 2022'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+title: 'Why Most AI Features Fail (And How to Be in the Minority That Succeeds)'
+description: 'The failure rate for AI feature launches is high. The reasons are almost always the same. Here is the pattern and how to break it.'
+pubDate: 'Feb 20 2026'
+category: 'Strategy'
+readTime: '6 min read'
+heroImage: '../../assets/heroes/crimson-plum.webp'
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
+Most AI features fail not because the technology does not work, but because the product decisions around the technology were wrong. After watching dozens of launches across different companies, the failure modes cluster around a familiar set of mistakes.
 
-Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc. Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra massa massa ultricies mi.
+## Mistake 1: Shipping a Capability, Not a Feature
 
-Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
+"We added AI to the search bar" is a capability. A feature solves a specific problem for a specific user in a specific moment. The distinction matters because capability launches generate initial curiosity and then flatline. Feature launches create habits.
 
-Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id cursus metus aliquam eleifend mi.
+Before building, answer: what does the user need to be true about their situation for this to be valuable? If the answer is "they need to want to use AI," you have a capability. If the answer is "they need to be writing a proposal at 11pm," you have a feature.
 
-Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
+## Mistake 2: Trusting Demo Quality
+
+AI demos are extraordinarily good at showing the best-case scenario. The model gives a perfect output. The user nods. The team ships. Production is different — real inputs are messier, edge cases appear, the model fails in ways that were invisible in controlled demos.
+
+Build your evaluation suite from adversarial examples, not from your best demos. The demo tells you what is possible. The adversarial set tells you what to expect.
+
+## Mistake 3: No Definition of "Good Enough"
+
+Without a clear quality bar, teams either ship too early (users encounter too many failures) or too late (perfect becomes the enemy of shipped). Define what good looks like before you start building. A specific number — "output is acceptable in 85% of tested cases" — is better than a vague standard.
+
+## The One Thing That Correlates with Success
+
+Teams that ship successful AI features almost always have one thing in common: they spent more time defining failure than defining success. They knew exactly what a bad output looked like, how often they were willing to tolerate it, and what would happen when users encountered it.
+
+That clarity is not a technical achievement. It is a product management achievement.

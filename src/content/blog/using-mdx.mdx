@@ -1,31 +1,36 @@
 ---
-title: 'Using MDX'
-description: 'Lorem ipsum dolor sit amet'
-pubDate: 'Jun 01 2024'
-heroImage: '../../assets/blog-placeholder-5.jpg'
+title: 'Communicating AI Uncertainty to Stakeholders Without Losing Their Confidence'
+description: 'Uncertainty is built into AI products. How you talk about it to executives, customers, and your team determines whether they trust you or not.'
+pubDate: 'Feb 12 2026'
+category: 'Communication'
+readTime: '6 min read'
+heroImage: '../../assets/heroes/coral-pink.webp'
 ---
 
-This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
+The hardest communication skill in AI product management is talking honestly about what you do not know without making people nervous. Get it wrong in one direction and you are seen as overconfident. Get it wrong in the other and you cannot get projects approved.
 
-## Why MDX?
+## Why AI Uncertainty Is Different
 
-MDX is a special flavor of Markdown that supports embedded JavaScript & JSX syntax. This unlocks the ability to [mix JavaScript and UI Components into your Markdown content](https://docs.astro.build/en/guides/integrations-guide/mdx/#mdx-in-astro) for things like interactive charts or alerts.
+Traditional product uncertainty is schedule uncertainty or market uncertainty. AI product uncertainty is deeper: the core functionality might work 80% of the time and you do not know which 20% will fail until you are in production. That is a different kind of unknown and it requires a different communication approach.
 
-If you have existing content authored in MDX, this integration will hopefully make migrating to Astro a breeze.
+## The Framework That Works
 
-## Example
+**Separate capability from reliability.** "The model can do X" and "the model does X reliably enough to ship" are different statements. Be explicit about which one you mean. Stakeholders conflate them by default.
 
-Here is how you import and use a UI component inside of MDX.  
-When you open this page in the browser, you should see the clickable button below.
+**Quantify where you can.** "It works well" means nothing. "It produces acceptable output in 87% of our test cases" is a statement you can have a real conversation about. What is acceptable to your stakeholders? Are 13 failures in 100 acceptable or catastrophic? That conversation leads somewhere useful.
 
-import HeaderLink from '../../components/HeaderLink.astro';
+**Name the known unknowns.** Before a stakeholder meeting, list the three things you are most uncertain about. Say them out loud. "We do not yet know how the model behaves on inputs outside our training distribution" is an honest statement that builds more trust than glossing over it.
 
-<HeaderLink href="#" onclick="alert('clicked!')">
-	Embedded component in MDX
-</HeaderLink>
+**Show the recovery path.** Uncertainty is less scary when there is a plan. "We do not know X, and here is how we will find out and what we will do when we do" is a complete communication.
 
-## More Links
+## What Not to Say
 
-- [MDX Syntax Documentation](https://mdxjs.com/docs/what-is-mdx)
-- [Astro Usage Documentation](https://docs.astro.build/en/basics/astro-pages/#markdownmdx-pages)
-- **Note:** [Client Directives](https://docs.astro.build/en/reference/directives-reference/#client-directives) are still required to create interactive components. Otherwise, all components in your MDX will render as static HTML (no JavaScript) by default.
+Avoid: "The AI will handle it." Handle what, how reliably, and what happens when it does not?
+
+Avoid: "We will improve it over time." This is the PM equivalent of "we will fix it in post." Users are using it now.
+
+Avoid: "Other companies do this." That does not tell your stakeholders anything about your product's quality bar.
+
+## The Trust Account
+
+Every honest conversation about uncertainty is a deposit in your stakeholder trust account. Every overpromise that misses is a withdrawal. AI products will disappoint sometimes — the question is whether you have enough trust built up that stakeholders interpret disappointment as a learning rather than a failure of leadership.

@@ -4,6 +4,7 @@ description: 'Managing a team that ships AI products requires a different postur
 pubDate: 'Mar 06 2026'
 category: 'Leadership'
 readTime: '8 min read'
+heroImage: '../../assets/heroes/teal-ocean.webp'
 ---
 
 The most common mistake new AI product leaders make is trying to manage uncertainty out of the process. They want clearer specs, more defined timelines, better estimates. What they get is a team that hides problems and ships with false confidence.

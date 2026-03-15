@@ -4,6 +4,7 @@ description: 'Most teams skip evaluation until something breaks in production. H
 pubDate: 'Mar 12 2026'
 category: 'LLM Development'
 readTime: '9 min read'
+heroImage: '../../assets/heroes/violet-indigo.webp'
 ---
 
 Shipping an LLM feature without an evaluation framework is like deploying code without tests — except the failures are often subtle, inconsistent, and visible to your users before your team notices.

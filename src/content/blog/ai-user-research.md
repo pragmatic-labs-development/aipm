@@ -4,6 +4,7 @@ description: 'AI can process hundreds of interviews, surface patterns, and gener
 pubDate: 'Mar 02 2026'
 category: 'Workflows'
 readTime: '6 min read'
+heroImage: '../../assets/heroes/forest-emerald.webp'
 ---
 
 The promise of AI-augmented research is that you never have to choose between speed and depth again. The reality is more nuanced: AI scales the parts of research that benefit from scale and introduces new risks in the parts that don't.

@@ -4,6 +4,7 @@ description: 'PMs who understand prompting make better decisions about what to b
 pubDate: 'Mar 04 2026'
 category: 'Getting Started'
 readTime: '5 min read'
+heroImage: '../../assets/heroes/cobalt-violet.webp'
 ---
 
 You do not need to be able to build a RAG pipeline. But if you are managing AI products and you have never written a prompt beyond a chat message, you are flying blind on the most consequential design decisions your team makes.

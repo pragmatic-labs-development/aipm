@@ -4,6 +4,7 @@ description: 'Traditional roadmapping breaks down when your core technology evol
 pubDate: 'Mar 10 2026'
 category: 'Roadmapping'
 readTime: '7 min read'
+heroImage: '../../assets/heroes/amber-rust.webp'
 ---
 
 The standard PM playbook says: talk to users, define problems, prioritise solutions, ship. The problem is that step three — "define solutions" — assumes a relatively stable technology surface. When your underlying model improves by 30% every six months, the solutions you ruled out last quarter might be trivially achievable today.

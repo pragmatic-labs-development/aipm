@@ -4,6 +4,7 @@ description: 'DAU and retention are not enough. AI features need a measurement f
 pubDate: 'Feb 28 2026'
 category: 'Strategy'
 readTime: '7 min read'
+heroImage: '../../assets/heroes/crimson-plum.webp'
 ---
 
 The instinct after launching an AI feature is to check the standard dashboard: DAU, session length, retention, revenue impact. These metrics matter. They are also insufficient — and sometimes actively misleading — for understanding AI product performance.

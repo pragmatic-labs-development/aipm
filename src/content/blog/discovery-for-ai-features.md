@@ -4,6 +4,7 @@ description: 'User interviews and jobs-to-be-done still matter. But AI product d
 pubDate: 'Mar 08 2026'
 category: 'Discovery'
 readTime: '6 min read'
+heroImage: '../../assets/heroes/magenta-rose.webp'
 ---
 
 Standard discovery asks: what problem does the user have, and how painful is it? AI product discovery has to ask a harder question on top of that: does the user believe a machine can help?
