@@ -2,20 +2,8 @@
   command = "npm run build"
   publish = "dist"
 
-# Only build deploy previews for pull requests; skip all branch deploys
 [build.environment]
   NODE_VERSION = "20"
-
-[context.production]
-  command = "npm run build"
-
-[context.deploy-preview]
-  command = "npm run build"
-
-# Branch deploys disabled — use deploy previews (PRs) only
-[context.branch-deploy]
-  command = "echo 'Branch deploys disabled — open a PR for a preview'"
-  publish = "dist"
 
 [[headers]]
   for = "/admin/*"
