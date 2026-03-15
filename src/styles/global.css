@@ -13,12 +13,21 @@
   --radius-btn:      6px;
   --radius-pill:     100px;
 
-  --bg:             #ffffff;
+  /* Source-matched variable names */
+  --bg-primary:     #ffffff;
   --bg-secondary:   #fafafa;
-  --card-bg:        #ffffff;
-  --text:           #1a1a1a;
+  --bg-card:        #ffffff;
+  --text-primary:   #1a1a1a;
   --text-secondary: #525252;
   --text-muted:     #737373;
+  --header-bg:      rgba(255, 255, 255, 0.95);
+  --transition:     0.2s ease;
+
+  /* Legacy aliases for components that use old names */
+  --bg:             var(--bg-primary);
+  --card-bg:        var(--bg-card);
+  --text:           var(--text-primary);
+
   --accent:         #0066cc;
   --accent-hover:   #0052a3;
   --border:         #e5e5e5;
@@ -30,12 +39,20 @@
 }
 
 [data-theme="dark"] {
-  --bg:             #0a0a0b;
+  --bg-primary:     #0a0a0b;
   --bg-secondary:   #141416;
-  --card-bg:        #1a1a1d;
-  --text:           #f5f5f5;
+  --bg-card:        #1a1a1d;
+  --text-primary:   #f5f5f5;
   --text-secondary: #a3a3a3;
   --text-muted:     #6b6b6b;
+  --header-bg:      rgba(10, 10, 11, 0.95);
+  --transition:     0.2s ease;
+
+  /* Legacy aliases */
+  --bg:             var(--bg-primary);
+  --card-bg:        var(--bg-card);
+  --text:           var(--text-primary);
+
   --accent:         #3b9eff;
   --accent-hover:   #60b0ff;
   --border:         #2a2a2e;
@@ -49,12 +66,15 @@
 /* Fallback for users without JS */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
-    --bg:             #0a0a0b;
+    --bg-primary:     #0a0a0b;
     --bg-secondary:   #141416;
-    --card-bg:        #1a1a1d;
-    --text:           #f5f5f5;
+    --bg-card:        #1a1a1d;
+    --text-primary:   #f5f5f5;
     --text-secondary: #a3a3a3;
     --text-muted:     #6b6b6b;
+    --bg:             var(--bg-primary);
+    --card-bg:        var(--bg-card);
+    --text:           var(--text-primary);
     --accent:         #3b9eff;
     --accent-hover:   #60b0ff;
     --border:         #2a2a2e;
@@ -75,14 +95,16 @@ body {
   font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--text-primary);
+  background: var(--bg-primary);
   margin: 0;
   padding: 0;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background var(--transition), color var(--transition);
 }
+
+body.menu-open { overflow: hidden; }
 
 /* ── Typography ── */
 
@@ -90,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Newsreader', Georgia, serif;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(--text-primary);
   margin: 0 0 0.5rem;
 }
 
@@ -99,7 +121,7 @@ p { margin: 0 0 1rem; }
 a {
   color: var(--accent);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition);
 }
 a:hover { color: var(--accent-hover); }
 
@@ -152,12 +174,54 @@ blockquote {
   font-family: 'Source Sans 3', sans-serif;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--accent);
   text-decoration: none;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
+
+/* ── Featured label ── */
+.featured-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.featured-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+/* ── Story card meta ── */
+.story-card-meta {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+/* ── Gradient placeholders ── */
+.placeholder-0 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.placeholder-1 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.placeholder-2 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.placeholder-3 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.placeholder-4 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.placeholder-5 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.placeholder-6 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
 
 /* ── Prose ── */
 .prose {
@@ -167,7 +231,7 @@ blockquote {
 }
 .prose h1, .prose h2, .prose h3,
 .prose h4, .prose h5, .prose h6 {
-  color: var(--text);
+  color: var(--text-primary);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }

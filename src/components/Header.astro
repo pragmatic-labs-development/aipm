@@ -4,9 +4,16 @@
 <header class="site-header">
   <div class="header-inner site-wrapper">
     <a href="/" class="logo" aria-label="AIPM.blog home">
-      <img src="/aipm-logo.webp" alt="" class="logo-img" width="44" height="44" />
-      <span class="logo-text">AIPM<span class="logo-accent">.blog</span></span>
+      <img src="/aipm-logo.webp" alt="AIPM.blog" class="logo-img" height="56" width="auto" />
     </a>
+
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">
+      <span class="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
 
     <nav id="mainNav" class="main-nav" aria-label="Main navigation">
       <a href="/blog">Blog</a>
@@ -15,53 +22,73 @@
       <a href="/#prompt-library">Prompt Library</a>
       <a href="/#training">Training</a>
       <a href="/#resources">Resources</a>
+      <a href="/pm-bot">PM Bot</a>
+      <a href="/sandbox">Sandbox</a>
       <a href="/about">About</a>
       <a href="/#newsletter" class="nav-subscribe">Subscribe</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </nav>
 
-    <div class="header-controls">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="sun-icon">☀️</span>
-        <span class="moon-icon">🌙</span>
-      </button>
-      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </div>
-
-  <div class="mobile-nav" id="mobileNav" aria-hidden="true">
-    <a href="/blog">Blog</a>
-    <a href="/#books">Books</a>
-    <a href="/#podcast">Podcast</a>
-    <a href="/#prompt-library">Prompt Library</a>
-    <a href="/#training">Training</a>
-    <a href="/#resources">Resources</a>
-    <a href="/about">About</a>
-    <a href="/#newsletter" class="nav-subscribe">Subscribe</a>
+    <div class="nav-overlay" id="navOverlay"></div>
   </div>
 </header>
 
 <script>
   // Theme toggle
   const themeBtn = document.getElementById('themeToggle')!;
-  const updateTheme = () => {
+  themeBtn?.addEventListener('click', () => {
     const current = document.documentElement.getAttribute('data-theme') ?? 'light';
     const next = current === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('aipm-theme', next);
-  };
-  themeBtn?.addEventListener('click', updateTheme);
+    localStorage.setItem('theme', next);
+  });
 
   // Mobile menu
-  const menuBtn = document.getElementById('mobileMenuToggle')!;
-  const mobileNav = document.getElementById('mobileNav')!;
-  menuBtn?.addEventListener('click', () => {
-    const open = menuBtn.getAttribute('aria-expanded') === 'true';
-    menuBtn.setAttribute('aria-expanded', String(!open));
-    mobileNav.setAttribute('aria-hidden', String(open));
-    mobileNav.classList.toggle('open', !open);
-    menuBtn.classList.toggle('open', !open);
+  const menuToggle = document.getElementById('mobileMenuToggle')!;
+  const mainNav = document.getElementById('mainNav')!;
+  const overlay = document.getElementById('navOverlay')!;
+
+  function toggleMobileMenu() {
+    const isOpen = mainNav.classList.contains('active');
+    if (isOpen) {
+      closeMobileMenu();
+    } else {
+      mainNav.classList.add('active');
+      menuToggle.classList.add('active');
+      overlay.classList.add('active');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('menu-open');
+    }
+  }
+
+  function closeMobileMenu() {
+    mainNav.classList.remove('active');
+    menuToggle.classList.remove('active');
+    overlay.classList.remove('active');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  }
+
+  menuToggle?.addEventListener('click', toggleMobileMenu);
+  overlay?.addEventListener('click', closeMobileMenu);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeMobileMenu();
   });
 </script>
 
@@ -70,90 +97,77 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    background: var(--header-bg);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--border-light);
   }
 
   .header-inner {
     display: flex;
     align-items: center;
-    height: 72px;
+    justify-content: space-between;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     gap: 2rem;
+    position: relative;
   }
 
   /* Logo */
   .logo {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
     text-decoration: none;
     flex-shrink: 0;
   }
   .logo-img {
-    height: 44px;
+    height: 56px;
     width: auto;
     display: block;
-    flex-shrink: 0;
   }
-  .logo-text {
-    font-family: 'Newsreader', Georgia, serif;
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--text);
-    line-height: 1;
-    white-space: nowrap;
-  }
-  .logo-accent { color: var(--accent); }
 
   /* Main nav */
   .main-nav {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 2rem;
     flex: 1;
-    overflow: hidden;
+    justify-content: flex-end;
   }
   .main-nav a {
     font-size: 0.9375rem;
     font-weight: 400;
     color: var(--text-secondary);
     text-decoration: none;
-    padding: 0.4rem 0.6rem;
-    border-radius: 6px;
+    transition: color var(--transition);
     white-space: nowrap;
-    transition: color 0.2s ease, background 0.15s ease;
   }
   .main-nav a:hover {
-    color: var(--text);
-    background: var(--border-light);
+    color: var(--text-primary);
   }
-  .main-nav .nav-subscribe {
-    font-weight: 600;
-    color: var(--bg);
-    background: var(--text);
-    padding: 0.4rem 1rem;
+
+  /* Subscribe button */
+  .nav-subscribe {
+    background: #1a1a1a;
+    color: white !important;
+    padding: 0.5rem 1rem;
     border-radius: 6px;
-    margin-left: 0.5rem;
-    transition: opacity 0.2s ease;
+    font-weight: 500;
+    transition: background var(--transition);
   }
-  .main-nav .nav-subscribe:hover {
-    background: var(--text);
-    color: var(--bg);
-    opacity: 0.8;
+  .nav-subscribe:hover {
+    background: #484848 !important;
+    color: white !important;
   }
-
-  /* Controls */
-  .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-left: auto;
-    flex-shrink: 0;
+  [data-theme="dark"] .nav-subscribe {
+    background: #ffffff;
+    color: #1a1a1a !important;
+  }
+  [data-theme="dark"] .nav-subscribe:hover {
+    background: #cccccc !important;
   }
 
+  /* Theme toggle */
   .theme-toggle {
     width: 40px;
     height: 40px;
@@ -165,82 +179,161 @@
     align-items: center;
     justify-content: center;
     font-size: 1rem;
-    transition: border-color 0.2s, background 0.2s;
+    transition: all var(--transition);
+    color: var(--text-secondary);
     flex-shrink: 0;
+    padding: 0;
   }
-  .theme-toggle:hover { border-color: var(--text-muted); }
+  .theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 
-  /* Show sun in dark mode, moon in light mode */
-  [data-theme="dark"] .sun-icon  { display: none; }
-  [data-theme="dark"] .moon-icon { display: block; }
-  [data-theme="light"] .sun-icon  { display: block; }
-  [data-theme="light"] .moon-icon { display: none; }
-  :not([data-theme]) .sun-icon  { display: block; }
-  :not([data-theme]) .moon-icon { display: none; }
+  /* Light mode: show moon (to switch to dark), hide sun */
+  .theme-toggle .sun-icon  { display: none; }
+  .theme-toggle .moon-icon { display: block; }
 
-  /* Mobile toggle */
+  /* Dark mode: show sun (to switch to light), hide moon */
+  [data-theme="dark"] .theme-toggle .sun-icon  { display: block; }
+  [data-theme="dark"] .theme-toggle .moon-icon { display: none; }
+
+  /* Mobile menu toggle */
   .mobile-menu-toggle {
     display: none;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    z-index: 101;
+    order: 3;
+    flex-shrink: 0;
+  }
+
+  .hamburger {
+    display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 5px;
-    width: 36px;
-    height: 36px;
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    cursor: pointer;
-    padding: 6px;
+    align-items: center;
+    width: 24px;
+    height: 24px;
+    margin: auto;
   }
-  .mobile-menu-toggle span {
+
+  .hamburger span {
     display: block;
+    width: 20px;
     height: 2px;
-    background: var(--text);
+    background: var(--text-primary);
     border-radius: 2px;
-    transition: all 0.2s ease;
+    transition: all 0.3s ease;
   }
-  .mobile-menu-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .mobile-menu-toggle.open span:nth-child(2) { opacity: 0; }
-  .mobile-menu-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  /* Mobile nav */
-  .mobile-nav {
+  .hamburger span:nth-child(1) { margin-bottom: 5px; }
+  .hamburger span:nth-child(3) { margin-top: 5px; }
+
+  .mobile-menu-toggle.active .hamburger span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+  .mobile-menu-toggle.active .hamburger span:nth-child(2) {
+    opacity: 0;
+  }
+  .mobile-menu-toggle.active .hamburger span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -5px);
+  }
+
+  /* Overlay */
+  .nav-overlay {
     display: none;
-    flex-direction: column;
-    background: var(--bg);
-    border-top: 1px solid var(--border);
-    padding: 0.75rem var(--content-padding) 1.25rem;
-    gap: 0.1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 99;
+    opacity: 0;
+    transition: opacity 0.3s ease;
   }
-  .mobile-nav.open { display: flex; }
-  .mobile-nav a {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    padding: 0.6rem 0.5rem;
-    border-bottom: 1px solid var(--border-light);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .mobile-nav a:last-child { border-bottom: none; }
-  .mobile-nav a:hover { color: var(--text); }
-  .mobile-nav .nav-subscribe {
-    margin-top: 0.75rem;
-    text-align: center;
-    background: var(--text);
-    color: var(--bg) !important;
-    border-radius: 6px;
-    font-weight: 600;
-    border-bottom: none;
-    padding: 0.6rem 1rem;
+  .nav-overlay.active {
+    opacity: 1;
   }
 
-  @media (max-width: 900px) {
-    .main-nav { display: none; }
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    .header-inner {
+      padding-top: 0.875rem;
+      padding-bottom: 0.875rem;
+    }
+
+    .logo-img { height: 44px; }
+
     .mobile-menu-toggle { display: flex; }
-    .header-inner { gap: 1rem; }
+
+    /* Mobile nav slides in from right */
+    .main-nav {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 80%;
+      max-width: 320px;
+      height: 100vh;
+      background: var(--bg-primary);
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: flex-start;
+      padding: 5rem 1.5rem 2rem;
+      gap: 0;
+      box-shadow: var(--shadow-lg);
+      transition: right 0.3s ease;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .main-nav.active {
+      right: 0;
+    }
+
+    .main-nav a {
+      padding: 1rem 0;
+      font-size: 1.125rem;
+      border-bottom: 1px solid var(--border-light);
+      color: var(--text-secondary);
+    }
+
+    .main-nav a:last-of-type {
+      border-bottom: none;
+    }
+
+    .nav-subscribe {
+      margin-top: 1rem;
+      text-align: center;
+      padding: 0.875rem 1rem;
+    }
+
+    .theme-toggle {
+      margin-top: 1.5rem;
+      align-self: flex-start;
+    }
+
+    .nav-overlay {
+      display: block;
+    }
   }
+
   @media (max-width: 480px) {
-    .logo-img { height: 36px; }
-    .logo-text { font-size: 1.2rem; }
+    .header-inner {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .logo-img { height: 40px; }
+
+    .main-nav {
+      width: 100%;
+      max-width: none;
+      padding: 4.5rem 1rem 2rem;
+    }
   }
 </style>

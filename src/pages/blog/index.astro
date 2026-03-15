@@ -13,7 +13,18 @@ const posts = (await getCollection('blog')).sort(
 
 const categories = [
   'Getting Started', 'Strategy', 'LLM Development', 'Discovery',
-  'Roadmapping', 'Leadership', 'Workflows', 'Systems', 'Delivery', 'Communication'
+  'Roadmapping', 'Leadership', 'Workflows', 'Systems', 'Delivery',
+  'Communication', 'AI-Augmented Products', 'Reviews', 'Case Studies'
+];
+
+const gradients = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+  'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+  'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+  'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+  'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
 ];
 ---
 
@@ -30,25 +41,23 @@ const categories = [
         <p class="hero-subtitle">Practical guides and frameworks for AI product management.</p>
       </section>
 
-      <div class="filters-wrap site-wrapper">
-        <div class="filters" id="filters">
-          <button class="filter-tag active" data-filter="all">All</button>
-          {categories.map(cat => (
-            <button class="filter-tag" data-filter={cat}>{cat}</button>
-          ))}
-        </div>
+      <div class="filters site-wrapper">
+        <button class="filter-tag active" data-filter="all">All</button>
+        {categories.map(cat => (
+          <button class="filter-tag" data-filter={cat}>{cat}</button>
+        ))}
       </div>
 
-      <section class="stories site-wrapper">
+      <section class="stories-section site-wrapper">
         <div class="stories-grid" id="storiesGrid">
-          {posts.map(post => (
+          {posts.map((post, i) => (
             <a
               href={`/blog/${post.id}/`}
               class="story-card"
               data-category={post.data.category ?? ''}
             >
-              {post.data.heroImage && (
-                <div class="story-card-image">
+              <div class="story-card-image">
+                {post.data.heroImage ? (
                   <Image
                     src={post.data.heroImage}
                     alt={post.data.title}
@@ -56,8 +65,10 @@ const categories = [
                     height={300}
                     class="card-img"
                   />
-                </div>
-              )}
+                ) : (
+                  <div class="gradient-placeholder" style={`background: ${gradients[i % gradients.length]};`}></div>
+                )}
+              </div>
               <div class="story-card-content">
                 {post.data.category && (
                   <span class="story-card-tag">{post.data.category}</span>
@@ -111,6 +122,7 @@ const categories = [
     padding: 4rem 0 3rem;
   }
   .hero-title {
+    font-family: 'Newsreader', Georgia, serif;
     font-size: clamp(2rem, 4vw, 3rem);
     font-weight: 500;
     letter-spacing: -0.03em;
@@ -122,38 +134,38 @@ const categories = [
     margin: 0;
   }
 
-  .filters-wrap {
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2.5rem;
-  }
   .filters {
+    padding-bottom: 2rem;
     display: flex;
+    gap: 0.75rem;
     flex-wrap: wrap;
-    gap: 0.4rem;
   }
   .filter-tag {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    background: transparent;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 100px;
-    padding: 0.35rem 0.9rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--transition);
     white-space: nowrap;
+    font-family: 'Source Sans 3', sans-serif;
   }
-  .filter-tag:hover { border-color: var(--text-muted); color: var(--text); }
+  .filter-tag:hover,
   .filter-tag.active {
-    background: var(--text);
-    border-color: var(--text);
-    color: var(--bg);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: white;
   }
-  [data-theme="dark"] .filter-tag.active { color: #1a1a1a; }
+  [data-theme="dark"] .filter-tag:hover,
+  [data-theme="dark"] .filter-tag.active {
+    color: #1a1a1a;
+  }
 
-  .stories { padding-bottom: 4rem; }
+  .stories-section {
+    padding-bottom: 4rem;
+  }
   .stories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -161,68 +173,73 @@ const categories = [
   }
 
   .story-card {
-    display: flex;
-    flex-direction: column;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: var(--bg-card);
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid var(--border);
+    transition: all var(--transition);
+    cursor: pointer;
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
   }
   .story-card:hover {
+    border-color: transparent;
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }
 
   .story-card-image {
-    aspect-ratio: 16/10;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-secondary);
+    position: relative;
     overflow: hidden;
   }
   .card-img {
-    width: 100%; height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
   .story-card:hover .card-img { transform: scale(1.03); }
 
+  .gradient-placeholder {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
   .story-card-content {
-    padding: 1.25rem 1.5rem 1.5rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     flex: 1;
   }
 
   .story-card-title {
+    font-family: 'Newsreader', Georgia, serif;
     font-size: 1.375rem;
     font-weight: 500;
-    line-height: 1.3;
-    color: var(--text);
-    margin: 0 0 0.6rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
   }
 
   .story-card-excerpt {
     font-size: 0.9375rem;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin: 0 0 1rem;
     flex: 1;
   }
-
-  .story-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: auto;
-  }
-  .story-card-date,
-  .story-card-read-time { font-size: 0.8125rem; color: var(--text-muted); }
-  .story-card-read-time::before { content: '·'; margin-right: 0.75rem; }
 
   .no-results {
     text-align: center;
@@ -231,7 +248,18 @@ const categories = [
     font-size: 1rem;
   }
 
-  @media (max-width: 1100px) { .stories-grid { grid-template-columns: repeat(3, 1fr); } }
-  @media (max-width: 768px)  { .stories-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; } }
-  @media (max-width: 480px)  { .stories-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 1200px) { .stories-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 900px)  { .stories-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 768px) {
+    .stories-grid { gap: 1.25rem; }
+    .story-card-content { padding: 1.25rem; }
+    .story-card-title { font-size: 1.25rem; }
+  }
+  @media (max-width: 600px)  { .stories-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 480px) {
+    .stories-grid { gap: 1rem; }
+    .story-card-content { padding: 1rem; }
+    .story-card-title { font-size: 1.125rem; }
+    .story-card-excerpt { font-size: 0.875rem; -webkit-line-clamp: 2; }
+  }
 </style>

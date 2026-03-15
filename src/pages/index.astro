@@ -16,7 +16,18 @@ const rest     = posts.filter(p => p.id !== featured?.id);
 
 const categories = [
   'Getting Started', 'Strategy', 'LLM Development', 'Discovery',
-  'Roadmapping', 'Leadership', 'Workflows', 'Systems', 'Delivery', 'Communication'
+  'Roadmapping', 'Leadership', 'Workflows', 'Systems', 'Delivery',
+  'Communication', 'AI-Augmented Products', 'Reviews', 'Case Studies'
+];
+
+const gradients = [
+  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+  'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+  'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+  'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+  'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+  'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+  'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
 ];
 ---
 
@@ -36,17 +47,15 @@ const categories = [
       </section>
 
       <!-- ── Filters ── -->
-      <div class="filters-wrap site-wrapper">
-        <div class="filters" id="filters">
-          <button class="filter-tag active" data-filter="all">All</button>
-          {categories.map(cat => (
-            <button class="filter-tag" data-filter={cat}>{cat}</button>
-          ))}
-        </div>
+      <div class="filters site-wrapper">
+        <button class="filter-tag active" data-filter="all">All</button>
+        {categories.map(cat => (
+          <button class="filter-tag" data-filter={cat}>{cat}</button>
+        ))}
       </div>
 
       <!-- ── Stories ── -->
-      <section class="stories site-wrapper" id="stories">
+      <section class="stories-section site-wrapper" id="stories">
         <div class="stories-grid" id="storiesGrid">
 
           <!-- Featured card -->
@@ -56,8 +65,8 @@ const categories = [
               class="story-card featured-card"
               data-category={featured.data.category ?? ''}
             >
-              {featured.data.heroImage && (
-                <div class="story-card-image featured-image">
+              <div class="story-card-image featured-image">
+                {featured.data.heroImage ? (
                   <Image
                     src={featured.data.heroImage}
                     alt={featured.data.title}
@@ -65,10 +74,12 @@ const categories = [
                     height={520}
                     class="card-img"
                   />
-                </div>
-              )}
+                ) : (
+                  <div class="gradient-placeholder" style={`background: ${gradients[0]};`}></div>
+                )}
+              </div>
               <div class="story-card-content">
-                <div class="featured-label"><span>Featured</span></div>
+                <div class="featured-label">Featured</div>
                 {featured.data.category && (
                   <span class="story-card-tag">{featured.data.category}</span>
                 )}
@@ -87,14 +98,14 @@ const categories = [
           )}
 
           <!-- Regular cards -->
-          {rest.map(post => (
+          {rest.map((post, i) => (
             <a
               href={`/blog/${post.id}/`}
               class="story-card"
               data-category={post.data.category ?? ''}
             >
-              {post.data.heroImage && (
-                <div class="story-card-image">
+              <div class="story-card-image">
+                {post.data.heroImage ? (
                   <Image
                     src={post.data.heroImage}
                     alt={post.data.title}
@@ -102,8 +113,10 @@ const categories = [
                     height={300}
                     class="card-img"
                   />
-                </div>
-              )}
+                ) : (
+                  <div class="gradient-placeholder" style={`background: ${gradients[(i + 1) % gradients.length]};`}></div>
+                )}
+              </div>
               <div class="story-card-content">
                 {post.data.category && (
                   <span class="story-card-tag">{post.data.category}</span>
@@ -130,11 +143,11 @@ const categories = [
 
       <!-- ── Newsletter ── -->
       <section class="newsletter" id="newsletter">
-        <div class="newsletter-inner site-wrapper">
+        <div class="newsletter-inner">
           <h2 class="newsletter-title">Get insights delivered</h2>
           <p class="newsletter-desc">Weekly perspectives on AI Product Management. No fluff, just practical lessons.</p>
           <form class="newsletter-form" onsubmit="return false;">
-            <input type="email" placeholder="you@example.com" required aria-label="Email address" />
+            <input type="email" placeholder="Your email" required aria-label="Email address" />
             <button type="submit">Subscribe</button>
           </form>
         </div>
@@ -173,58 +186,57 @@ const categories = [
     max-width: var(--max-width);
   }
   .hero-title {
+    font-family: 'Newsreader', Georgia, serif;
     font-size: clamp(2.5rem, 5vw, 3.5rem);
     font-weight: 500;
     letter-spacing: -0.03em;
-    line-height: 1.1;
-    margin-bottom: 1rem;
+    line-height: 1.15;
+    max-width: 700px;
+    margin-bottom: 1.25rem;
   }
   .hero-subtitle {
     font-size: 1.25rem;
     font-weight: 300;
     color: var(--text-secondary);
-    max-width: 640px;
+    max-width: 600px;
     line-height: 1.6;
     margin: 0;
   }
 
   /* ── Filters ── */
-  .filters-wrap {
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 2.5rem;
-  }
   .filters {
+    padding-bottom: 2rem;
     display: flex;
+    gap: 0.75rem;
     flex-wrap: wrap;
-    gap: 0.4rem;
   }
   .filter-tag {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-    background: transparent;
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
     border: 1px solid var(--border);
     border-radius: 100px;
-    padding: 0.35rem 0.9rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all var(--transition);
     white-space: nowrap;
+    font-family: 'Source Sans 3', sans-serif;
   }
-  .filter-tag:hover {
-    border-color: var(--text-muted);
-    color: var(--text);
-  }
+  .filter-tag:hover,
   .filter-tag.active {
-    background: var(--text);
-    border-color: var(--text);
-    color: var(--bg);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
+    color: white;
   }
-  [data-theme="dark"] .filter-tag.active { color: #1a1a1a; }
+  [data-theme="dark"] .filter-tag:hover,
+  [data-theme="dark"] .filter-tag.active {
+    color: #1a1a1a;
+  }
 
   /* ── Stories grid ── */
-  .stories { padding-bottom: 2rem; }
+  .stories-section {
+    padding-bottom: 4rem;
+  }
   .stories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -233,110 +245,99 @@ const categories = [
 
   /* ── Base card ── */
   .story-card {
-    display: flex;
-    flex-direction: column;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
+    background: var(--bg-card);
     border-radius: 12px;
     overflow: hidden;
+    border: 1px solid var(--border);
+    transition: all var(--transition);
+    cursor: pointer;
     text-decoration: none;
     color: inherit;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
   }
   .story-card:hover {
+    border-color: transparent;
     box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }
 
   .story-card-image {
-    aspect-ratio: 16/10;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-secondary);
+    position: relative;
     overflow: hidden;
   }
   .card-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
   .story-card:hover .card-img { transform: scale(1.03); }
 
+  .gradient-placeholder {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
   .story-card-content {
-    padding: 1.25rem 1.5rem 1.5rem;
+    padding: 1.5rem;
     display: flex;
     flex-direction: column;
     flex: 1;
   }
 
   .story-card-title {
+    font-family: 'Newsreader', Georgia, serif;
     font-size: 1.375rem;
     font-weight: 500;
-    line-height: 1.3;
-    color: var(--text);
-    margin: 0 0 0.6rem;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
   }
 
   .story-card-excerpt {
     font-size: 0.9375rem;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     line-height: 1.55;
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin: 0 0 1rem;
     flex: 1;
   }
-
-  .story-card-meta {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-top: auto;
-  }
-  .story-card-date,
-  .story-card-read-time {
-    font-size: 0.8125rem;
-    color: var(--text-muted);
-  }
-  .story-card-read-time::before { content: '·'; margin-right: 0.75rem; }
 
   /* ── Featured card ── */
   .featured-card {
     grid-column: span 3;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 0;
+    flex-direction: unset;
   }
 
   .featured-image {
-    flex: 1.4;
-    aspect-ratio: unset;
+    aspect-ratio: auto;
+    height: 100%;
     min-height: 320px;
   }
 
   .featured-card .story-card-content {
-    flex: 1;
     padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-  }
-
-  .featured-label {
-    margin-bottom: 0.75rem;
-  }
-  .featured-label span {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 0.2rem 0.55rem;
   }
 
   .featured-title {
     font-size: 2rem !important;
     line-height: 1.2 !important;
-    margin-bottom: 0.85rem !important;
   }
 
   .featured-card .story-card-excerpt {
@@ -357,78 +358,131 @@ const categories = [
   .newsletter {
     background: var(--bg-secondary);
     border-top: 1px solid var(--border);
-    margin-top: 4rem;
+    padding: 4rem 3rem;
+    margin-top: 0;
   }
   .newsletter-inner {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-    max-width: 560px;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
   }
   .newsletter-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 600;
-    margin-bottom: 0.6rem;
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.75rem;
   }
   .newsletter-desc {
-    font-size: 1.0625rem;
     color: var(--text-secondary);
-    margin-bottom: 1.75rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
   }
   .newsletter-form {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    max-width: 440px;
+    margin: 0 auto;
   }
   .newsletter-form input {
     flex: 1;
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 1rem;
-    padding: 0.65rem 1rem;
+    padding: 0.875rem 1rem;
     border: 1px solid var(--border);
-    border-radius: 6px;
-    background: var(--bg);
-    color: var(--text);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: white;
+    transition: border-color var(--transition);
+  }
+  .newsletter-form input:focus {
     outline: none;
-    transition: border-color 0.2s;
+    border-color: var(--accent);
   }
-  .newsletter-form input:focus { border-color: var(--accent); }
   .newsletter-form button {
-    font-family: 'Source Sans 3', sans-serif;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    padding: 0.65rem 1.5rem;
-    background: var(--accent);
-    color: #fff;
+    padding: 0.875rem 1.5rem;
+    background: #1a1a1a;
+    color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
     cursor: pointer;
+    transition: background var(--transition);
     white-space: nowrap;
-    transition: background 0.2s;
   }
-  .newsletter-form button:hover { background: var(--accent-hover); }
+  .newsletter-form button:hover { background: #484848; }
+  [data-theme="dark"] .newsletter-form button {
+    background: #ffffff;
+    color: #1a1a1a;
+  }
+  [data-theme="dark"] .newsletter-form button:hover { background: #cccccc; }
 
   /* ── Responsive ── */
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     .stories-grid { grid-template-columns: repeat(3, 1fr); }
-    .featured-card { grid-column: span 3; }
-  }
-  @media (max-width: 768px) {
-    .stories-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
     .featured-card {
       grid-column: span 2;
-      flex-direction: column;
+      grid-template-columns: 1.2fr 1fr;
     }
-    .featured-image {
-      flex: unset;
-      aspect-ratio: 16/10;
-      min-height: unset;
+  }
+  @media (max-width: 900px) {
+    .stories-grid { grid-template-columns: repeat(2, 1fr); }
+    .featured-card {
+      grid-column: span 2;
+      grid-template-columns: 1fr;
     }
+  }
+  @media (max-width: 768px) {
+    .hero { padding: 2.5rem 0 2rem; }
+    .hero-title { font-size: 2rem; }
+    .hero-subtitle { font-size: 1.0625rem; }
+    .filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding-bottom: 1.5rem;
+    }
+    .filters::-webkit-scrollbar { display: none; }
+    .filter-tag {
+      flex-shrink: 0;
+      padding: 0.5rem 0.875rem;
+      font-size: 0.8125rem;
+    }
+    .stories-section { padding-bottom: 3rem; }
+    .stories-grid { gap: 1.25rem; }
+    .featured-card .story-card-image { min-height: 200px; }
     .featured-card .story-card-content { padding: 1.5rem; }
     .featured-title { font-size: 1.5rem !important; }
+    .featured-card .story-card-excerpt { -webkit-line-clamp: 3; }
+    .story-card-content { padding: 1.25rem; }
+    .story-card-title { font-size: 1.25rem; }
+    .newsletter { padding: 3rem 1.5rem; }
+    .newsletter-title { font-size: 1.625rem; }
+    .newsletter-desc { font-size: 1rem; }
+  }
+  @media (max-width: 600px) {
+    .stories-grid { grid-template-columns: 1fr; }
+    .featured-card { grid-column: span 1; }
+  }
+  @media (max-width: 500px) {
     .newsletter-form { flex-direction: column; }
   }
   @media (max-width: 480px) {
-    .stories-grid { grid-template-columns: 1fr; }
-    .featured-card { grid-column: span 1; }
-    .hero-subtitle { font-size: 1.0625rem; }
+    .hero { padding: 2rem 0 1.5rem; }
+    .hero-title { font-size: 1.75rem; line-height: 1.2; }
+    .hero-subtitle { font-size: 1rem; }
+    .filters { padding-bottom: 1.25rem; gap: 0.5rem; }
+    .filter-tag { padding: 0.4rem 0.75rem; font-size: 0.75rem; }
+    .stories-section { padding-bottom: 2.5rem; }
+    .stories-grid { gap: 1rem; }
+    .featured-card .story-card-image { min-height: 180px; }
+    .featured-card .story-card-content { padding: 1.25rem; }
+    .featured-title { font-size: 1.375rem !important; }
+    .story-card-content { padding: 1rem; }
+    .story-card-title { font-size: 1.125rem; }
+    .story-card-excerpt { font-size: 0.875rem; -webkit-line-clamp: 2; }
   }
 </style>

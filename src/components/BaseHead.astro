@@ -61,9 +61,11 @@ const { title, description, image = FallbackImage } = Astro.props;
 <!-- Theme: run before body to prevent flash -->
 <script is:inline>
   (function() {
-    var stored = localStorage.getItem('aipm-theme');
-    var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', theme);
+    var savedTheme = localStorage.getItem('theme');
+    var hour = new Date().getHours();
+    var timeTheme = (hour >= 7 && hour < 19) ? 'light' : 'dark';
+    var initialTheme = savedTheme || timeTheme;
+    document.documentElement.setAttribute('data-theme', initialTheme);
   })();
 </script>
 
