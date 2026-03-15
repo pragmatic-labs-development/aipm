@@ -8,79 +8,128 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'blog'>['data'];
 
-const { title, description, pubDate, updatedDate, heroImage } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, category } = Astro.props;
 ---
 
 <html lang="en">
-	<head>
-		<BaseHead title={title} description={description} />
-		<style>
-			main {
-				width: calc(100% - 2em);
-				max-width: 100%;
-				margin: 0;
-			}
-			.hero-image {
-				width: 100%;
-			}
-			.hero-image img {
-				display: block;
-				margin: 0 auto;
-				border-radius: 12px;
-				box-shadow: var(--box-shadow);
-			}
-			.prose {
-				width: 720px;
-				max-width: calc(100% - 2em);
-				margin: auto;
-				padding: 1em;
-				color: rgb(var(--gray-dark));
-			}
-			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
-				line-height: 1;
-			}
-			.title h1 {
-				margin: 0 0 0.5em 0;
-			}
-			.date {
-				margin-bottom: 0.5em;
-				color: rgb(var(--gray));
-			}
-			.last-updated-on {
-				font-style: italic;
-			}
-		</style>
-	</head>
+  <head>
+    <BaseHead title={title} description={description} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <article>
+        <!-- Article header -->
+        <header class="article-header site-wrapper">
+          <a href="/blog" class="back-link">← All Posts</a>
+          {category && <span class="category-badge">{category}</span>}
+          <h1 class="article-title">{title}</h1>
+          <p class="article-description">{description}</p>
+          <div class="article-meta">
+            <time><FormattedDate date={pubDate} /></time>
+            {updatedDate && (
+              <span class="updated">
+                Updated <FormattedDate date={updatedDate} />
+              </span>
+            )}
+          </div>
+        </header>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
-				</div>
-				<div class="prose">
-					<div class="title">
-						<div class="date">
-							<FormattedDate date={pubDate} />
-							{
-								updatedDate && (
-									<div class="last-updated-on">
-										Last updated on <FormattedDate date={updatedDate} />
-									</div>
-								)
-							}
-						</div>
-						<h1>{title}</h1>
-						<hr />
-					</div>
-					<slot />
-				</div>
-			</article>
-		</main>
-		<Footer />
-	</body>
+        <!-- Hero image -->
+        {heroImage && (
+          <div class="hero-image-wrap site-wrapper">
+            <Image
+              src={heroImage}
+              alt={title}
+              width={1200}
+              height={630}
+              class="hero-image"
+            />
+          </div>
+        )}
+
+        <!-- Article body -->
+        <div class="article-body site-wrapper">
+          <div class="prose">
+            <slot />
+          </div>
+        </div>
+      </article>
+    </main>
+    <Footer />
+  </body>
 </html>
+
+<style>
+  main { padding-bottom: 4rem; }
+
+  .article-header {
+    padding-top: 2.5rem;
+    padding-bottom: 2rem;
+    max-width: 760px;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-decoration: none;
+    margin-bottom: 1.25rem;
+    transition: color 0.2s ease;
+  }
+  .back-link:hover { color: var(--accent); }
+
+  .article-header .category-badge { margin-bottom: 0.85rem; }
+
+  .article-title {
+    font-size: clamp(1.75rem, 4vw, 2.75rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin: 0.5rem 0 1rem;
+  }
+
+  .article-description {
+    font-size: 1.125rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0 0 1.25rem;
+    max-width: 640px;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .updated {
+    padding-left: 1rem;
+    border-left: 1px solid var(--border);
+    font-style: italic;
+  }
+
+  /* Hero image */
+  .hero-image-wrap {
+    margin-bottom: 2.5rem;
+    max-width: 900px;
+  }
+  .hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border);
+  }
+
+  /* Body */
+  .article-body {
+    max-width: 760px;
+  }
+
+  @media (max-width: 768px) {
+    .article-header { padding-top: 1.5rem; }
+    .article-description { font-size: 1rem; }
+  }
+</style>

@@ -1,49 +1,279 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const featured = posts.find(p => p.data.featured) ?? posts[0];
+const recent = posts.filter(p => p.id !== featured?.id).slice(0, 8);
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This template
-				serves as a lightweight, minimally-styled starting point for anyone looking to build a personal
-				website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+
+      {/* ── Featured Post ── */}
+      {featured && (
+        <section class="featured-section site-wrapper">
+          <a href={`/blog/${featured.id}/`} class="featured-card">
+            {featured.data.heroImage && (
+              <div class="featured-img-wrap">
+                <Image
+                  src={featured.data.heroImage}
+                  alt={featured.data.title}
+                  width={800}
+                  height={500}
+                  class="featured-img"
+                />
+              </div>
+            )}
+            <div class="featured-content">
+              {featured.data.category && (
+                <span class="category-badge">{featured.data.category}</span>
+              )}
+              <h2 class="featured-title">{featured.data.title}</h2>
+              <p class="featured-desc">{featured.data.description}</p>
+              <div class="featured-meta">
+                <FormattedDate date={featured.data.pubDate} />
+              </div>
+            </div>
+          </a>
+        </section>
+      )}
+
+      {/* ── Recent Posts ── */}
+      {recent.length > 0 && (
+        <section class="recent-section site-wrapper">
+          <h3 class="section-label">Recent Posts</h3>
+          <div class="posts-grid">
+            {recent.map(post => (
+              <a href={`/blog/${post.id}/`} class="post-card">
+                {post.data.heroImage && (
+                  <div class="card-img-wrap">
+                    <Image
+                      src={post.data.heroImage}
+                      alt={post.data.title}
+                      width={480}
+                      height={300}
+                      class="card-img"
+                    />
+                  </div>
+                )}
+                <div class="card-body">
+                  {post.data.category && (
+                    <span class="category-badge">{post.data.category}</span>
+                  )}
+                  <h4 class="card-title">{post.data.title}</h4>
+                  <p class="card-desc">{post.data.description}</p>
+                  <span class="card-date">
+                    <FormattedDate date={post.data.pubDate} />
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+          {posts.length > 9 && (
+            <div class="view-all-wrap">
+              <a href="/blog" class="view-all-btn">View all posts →</a>
+            </div>
+          )}
+        </section>
+      )}
+
+    </main>
+    <Footer />
+  </body>
 </html>
+
+<style>
+  main { padding-bottom: 4rem; }
+
+  /* ── Featured ── */
+  .featured-section { padding-top: 3rem; padding-bottom: 3rem; }
+
+  .featured-card {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 2.5rem;
+    align-items: center;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .featured-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .featured-img-wrap {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .featured-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .featured-card:hover .featured-img { transform: scale(1.03); }
+
+  .featured-content {
+    padding: 2.5rem 2.5rem 2.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .featured-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.2;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .featured-desc {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .featured-meta {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.25rem;
+  }
+
+  /* ── Recent Posts ── */
+  .recent-section { padding-top: 1rem; }
+
+  .section-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+  }
+
+  .post-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .post-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .card-img-wrap {
+    aspect-ratio: 16/10;
+    overflow: hidden;
+  }
+  .card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  .post-card:hover .card-img { transform: scale(1.03); }
+
+  .card-body {
+    padding: 1.1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--text);
+    margin: 0;
+  }
+
+  .card-desc {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+    flex: 1;
+  }
+
+  .card-date {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  .view-all-wrap {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+  .view-all-btn {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    color: var(--accent);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .view-all-btn:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 1024px) {
+    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .featured-card { grid-template-columns: 1fr; }
+    .featured-content { padding: 1.5rem; }
+    .posts-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  }
+  @media (max-width: 480px) {
+    .posts-grid { grid-template-columns: 1fr; }
+    .featured-section { padding-top: 1.5rem; }
+  }
+</style>
