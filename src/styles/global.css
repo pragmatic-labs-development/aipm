@@ -2,6 +2,17 @@
 
 :root,
 [data-theme="light"] {
+  /* Fonts */
+  --font-serif: 'Newsreader', Georgia, serif;
+  --font-sans:  'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Layout */
+  --max-width:       1440px;
+  --content-padding: 3rem;
+  --radius-card:     12px;
+  --radius-btn:      6px;
+  --radius-pill:     100px;
+
   --bg:             #ffffff;
   --bg-secondary:   #fafafa;
   --card-bg:        #ffffff;
@@ -51,16 +62,6 @@
   }
 }
 
-/* Fonts */
---font-serif: 'Newsreader', Georgia, serif;
---font-sans:  'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-
-/* Layout */
---max-width:       1440px;
---content-padding: 3rem;
---radius-card:     12px;
---radius-btn:      6px;
---radius-pill:     100px;
 
 *, *::before, *::after { box-sizing: border-box; }
 
