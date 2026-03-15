@@ -6,18 +6,19 @@ const W = 960;
 const H = 600;
 
 // Each gradient: [r1,g1,b1] top-left colour → [r2,g2,b2] bottom-right colour
+// All colours are high-saturation, mid-to-high brightness
 const gradients = [
-  { name: 'violet-indigo',    c1: [102, 51, 153],   c2: [45, 27, 105]    },
-  { name: 'amber-rust',       c1: [180, 130, 20],   c2: [180, 75, 30]    },
-  { name: 'magenta-rose',     c1: [160, 40, 120],   c2: [210, 60, 90]    },
-  { name: 'teal-ocean',       c1: [25, 120, 130],   c2: [20, 60, 110]    },
-  { name: 'cobalt-violet',    c1: [40, 60, 180],    c2: [100, 30, 160]   },
-  { name: 'forest-emerald',   c1: [20, 90, 60],     c2: [10, 130, 80]    },
-  { name: 'coral-pink',       c1: [200, 80, 80],    c2: [230, 130, 150]  },
-  { name: 'midnight-teal',    c1: [15, 25, 80],     c2: [20, 90, 110]    },
-  { name: 'crimson-plum',     c1: [140, 20, 60],    c2: [80, 15, 90]     },
-  { name: 'olive-bronze',     c1: [100, 100, 20],   c2: [140, 70, 20]    },
-  { name: 'slate-sapphire',   c1: [50, 60, 110],    c2: [30, 40, 80]     },
+  { name: 'violet-indigo',    c1: [130, 80, 230],   c2: [80, 40, 190]    },
+  { name: 'amber-rust',       c1: [220, 160, 20],   c2: [205, 85, 25]    },
+  { name: 'magenta-rose',     c1: [210, 50, 140],   c2: [230, 70, 95]    },
+  { name: 'teal-ocean',       c1: [20, 190, 190],   c2: [20, 120, 210]   },
+  { name: 'cobalt-violet',    c1: [65, 85, 225],    c2: [130, 45, 205]   },
+  { name: 'forest-emerald',   c1: [30, 170, 100],   c2: [20, 140, 70]    },
+  { name: 'coral-pink',       c1: [225, 90, 90],    c2: [240, 140, 150]  },
+  { name: 'midnight-teal',    c1: [20, 170, 185],   c2: [30, 100, 175]   },
+  { name: 'crimson-plum',     c1: [210, 40, 85],    c2: [155, 20, 130]   },
+  { name: 'olive-bronze',     c1: [205, 175, 20],   c2: [200, 110, 20]   },
+  { name: 'slate-sapphire',   c1: [85, 105, 230],   c2: [45, 65, 205]    },
 ];
 
 function lerp(a, b, t) { return Math.round(a + (b - a) * t); }
