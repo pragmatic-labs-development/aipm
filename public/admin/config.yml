@@ -1,0 +1,41 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: src/assets/blog
+public_folder: /src/assets/blog
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: blog
+    label: Blog Posts
+    folder: src/content/blog
+    create: true
+    slug: "{{slug}}"
+    extension: md
+    format: frontmatter
+    fields:
+      - { label: Title, name: title, widget: string }
+      - { label: Description, name: description, widget: text }
+      - { label: Publish Date, name: pubDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Updated Date, name: updatedDate, widget: datetime, date_format: YYYY-MM-DD, time_format: false, required: false }
+      - label: Category
+        name: category
+        widget: select
+        required: false
+        options:
+          - Getting Started
+          - Strategy
+          - LLM Development
+          - Discovery
+          - Roadmapping
+          - Leadership
+          - Workflows
+          - Systems
+          - Delivery
+          - Communication
+      - { label: Tags, name: tags, widget: list, required: false }
+      - { label: Featured, name: featured, widget: boolean, default: false, required: false }
+      - { label: Hero Image, name: heroImage, widget: image, required: false }
+      - { label: Body, name: body, widget: markdown }
