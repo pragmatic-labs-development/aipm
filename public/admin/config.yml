@@ -37,5 +37,6 @@ collections:
           - Communication
       - { label: Tags, name: tags, widget: list, required: false }
       - { label: Featured, name: featured, widget: boolean, default: false, required: false }
+      - { label: Read Time, name: readTime, widget: string, required: false, hint: "e.g. 8 min read" }
       - { label: Hero Image, name: heroImage, widget: image, required: false }
       - { label: Body, name: body, widget: markdown }

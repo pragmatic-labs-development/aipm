@@ -1,45 +1,66 @@
 /* ── AIPM Design System ── */
 
-:root {
-  --bg:           #ffffff;
-  --bg-secondary: #fafafa;
-  --card-bg:      #ffffff;
-  --text:         #1a1a1a;
+:root,
+[data-theme="light"] {
+  --bg:             #ffffff;
+  --bg-secondary:   #fafafa;
+  --card-bg:        #ffffff;
+  --text:           #1a1a1a;
   --text-secondary: #525252;
-  --text-muted:   #737373;
-  --accent:       #0066cc;
-  --accent-hover: #0052a3;
-  --border:       #e5e5e5;
-  --border-light: #f0f0f0;
+  --text-muted:     #737373;
+  --accent:         #0066cc;
+  --accent-hover:   #0052a3;
+  --border:         #e5e5e5;
+  --border-light:   #f0f0f0;
 
-  --font-serif: 'Newsreader', Georgia, serif;
-  --font-sans:  'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  --max-width: 1440px;
-  --content-padding: 3rem;
-
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg: 0 20px 48px rgba(0,0,0,0.12);
-
-  --radius-card: 12px;
-  --radius-sm:   6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
 }
 
+[data-theme="dark"] {
+  --bg:             #0a0a0b;
+  --bg-secondary:   #141416;
+  --card-bg:        #1a1a1d;
+  --text:           #f5f5f5;
+  --text-secondary: #a3a3a3;
+  --text-muted:     #6b6b6b;
+  --accent:         #3b9eff;
+  --accent-hover:   #60b0ff;
+  --border:         #2a2a2e;
+  --border-light:   #1f1f22;
+
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3), 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Fallback for users without JS */
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg:           #0a0a0b;
-    --bg-secondary: #141416;
-    --card-bg:      #1a1a1d;
-    --text:         #f5f5f5;
+  :root:not([data-theme]) {
+    --bg:             #0a0a0b;
+    --bg-secondary:   #141416;
+    --card-bg:        #1a1a1d;
+    --text:           #f5f5f5;
     --text-secondary: #a3a3a3;
-    --text-muted:   #6b6b6b;
-    --accent:       #3b9eff;
-    --accent-hover: #60b0ff;
-    --border:       #2a2a2e;
-    --border-light: #1f1f22;
+    --text-muted:     #6b6b6b;
+    --accent:         #3b9eff;
+    --accent-hover:   #60b0ff;
+    --border:         #2a2a2e;
+    --border-light:   #1f1f22;
   }
 }
+
+/* Fonts */
+--font-serif: 'Newsreader', Georgia, serif;
+--font-sans:  'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+
+/* Layout */
+--max-width:       1440px;
+--content-padding: 3rem;
+--radius-card:     12px;
+--radius-btn:      6px;
+--radius-pill:     100px;
 
 *, *::before, *::after { box-sizing: border-box; }
 
@@ -50,7 +71,7 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--text);
@@ -59,22 +80,18 @@ body {
   padding: 0;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 /* ── Typography ── */
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
+  font-family: 'Newsreader', Georgia, serif;
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--text);
   margin: 0 0 0.5rem;
 }
-
-h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 700; }
-h2 { font-size: clamp(1.4rem, 3vw, 2rem);    font-weight: 700; }
-h3 { font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 600; }
-h4 { font-size: 1.125rem; font-weight: 600; }
 
 p { margin: 0 0 1rem; }
 
@@ -102,7 +119,7 @@ code {
 
 pre {
   padding: 1.5rem;
-  border-radius: var(--radius-card);
+  border-radius: 12px;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   overflow-x: auto;
@@ -114,39 +131,34 @@ blockquote {
   border-left: 3px solid var(--accent);
   margin: 1.5rem 0;
   padding: 0.25rem 0 0.25rem 1.5rem;
-  font-family: var(--font-serif);
+  font-family: 'Newsreader', Georgia, serif;
   font-size: 1.15rem;
   font-style: italic;
   color: var(--text-secondary);
 }
 
 /* ── Layout ── */
-
 .site-wrapper {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--content-padding);
+  padding-left: var(--content-padding);
+  padding-right: var(--content-padding);
 }
 
-/* ── Category badge ── */
-
-.category-badge {
+/* ── Category / story tag ── */
+.story-card-tag {
   display: inline-block;
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
-  border-radius: 99px;
-  padding: 0.2rem 0.65rem;
   text-decoration: none;
+  margin-bottom: 0.5rem;
 }
 
-/* ── Prose (article body) ── */
-
+/* ── Prose ── */
 .prose {
   font-size: 1.0625rem;
   line-height: 1.75;
@@ -158,14 +170,14 @@ blockquote {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
 }
-.prose p { margin-bottom: 1.5rem; }
-.prose a { text-decoration: underline; text-underline-offset: 3px; }
+.prose p  { margin-bottom: 1.5rem; }
+.prose a  { text-decoration: underline; text-underline-offset: 3px; }
 .prose ul, .prose ol { padding-left: 1.5rem; margin-bottom: 1.5rem; }
 .prose li { margin-bottom: 0.4rem; }
-.prose img { border-radius: var(--radius-card); margin: 2rem auto; }
+.prose img { border-radius: 12px; margin: 2rem auto; }
+.prose blockquote { margin: 2rem 0; }
 
 /* ── Accessibility ── */
-
 .sr-only {
   position: absolute;
   width: 1px; height: 1px;
@@ -177,10 +189,5 @@ blockquote {
 }
 
 /* ── Responsive ── */
-
-@media (max-width: 768px) {
-  :root { --content-padding: 1.25rem; }
-}
-@media (max-width: 480px) {
-  :root { --content-padding: 1rem; }
-}
+@media (max-width: 768px)  { :root { --content-padding: 1.5rem; } }
+@media (max-width: 480px)  { :root { --content-padding: 1rem; } }

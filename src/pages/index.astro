@@ -12,7 +12,12 @@ const posts = (await getCollection('blog')).sort(
 );
 
 const featured = posts.find(p => p.data.featured) ?? posts[0];
-const recent = posts.filter(p => p.id !== featured?.id).slice(0, 8);
+const rest     = posts.filter(p => p.id !== featured?.id);
+
+const categories = [
+  'Getting Started', 'Strategy', 'LLM Development', 'Discovery',
+  'Roadmapping', 'Leadership', 'Workflows', 'Systems', 'Delivery', 'Communication'
+];
 ---
 
 <!doctype html>
@@ -24,181 +29,226 @@ const recent = posts.filter(p => p.id !== featured?.id).slice(0, 8);
     <Header />
     <main>
 
-      {/* ── Featured Post ── */}
-      {featured && (
-        <section class="featured-section site-wrapper">
-          <a href={`/blog/${featured.id}/`} class="featured-card">
-            {featured.data.heroImage && (
-              <div class="featured-img-wrap">
-                <Image
-                  src={featured.data.heroImage}
-                  alt={featured.data.title}
-                  width={800}
-                  height={500}
-                  class="featured-img"
-                />
-              </div>
-            )}
-            <div class="featured-content">
-              {featured.data.category && (
-                <span class="category-badge">{featured.data.category}</span>
-              )}
-              <h2 class="featured-title">{featured.data.title}</h2>
-              <p class="featured-desc">{featured.data.description}</p>
-              <div class="featured-meta">
-                <FormattedDate date={featured.data.pubDate} />
-              </div>
-            </div>
-          </a>
-        </section>
-      )}
+      <!-- ── Hero ── -->
+      <section class="hero site-wrapper">
+        <h1 class="hero-title">Learn AI Product Management</h1>
+        <p class="hero-subtitle">Guides, tutorials, and frameworks for PMs at every level — from fundamentals to advanced techniques.</p>
+      </section>
 
-      {/* ── Recent Posts ── */}
-      {recent.length > 0 && (
-        <section class="recent-section site-wrapper">
-          <h3 class="section-label">Recent Posts</h3>
-          <div class="posts-grid">
-            {recent.map(post => (
-              <a href={`/blog/${post.id}/`} class="post-card">
-                {post.data.heroImage && (
-                  <div class="card-img-wrap">
-                    <Image
-                      src={post.data.heroImage}
-                      alt={post.data.title}
-                      width={480}
-                      height={300}
-                      class="card-img"
-                    />
-                  </div>
+      <!-- ── Filters ── -->
+      <div class="filters-wrap site-wrapper">
+        <div class="filters" id="filters">
+          <button class="filter-tag active" data-filter="all">All</button>
+          {categories.map(cat => (
+            <button class="filter-tag" data-filter={cat}>{cat}</button>
+          ))}
+        </div>
+      </div>
+
+      <!-- ── Stories ── -->
+      <section class="stories site-wrapper" id="stories">
+        <div class="stories-grid" id="storiesGrid">
+
+          <!-- Featured card -->
+          {featured && (
+            <a
+              href={`/blog/${featured.id}/`}
+              class="story-card featured-card"
+              data-category={featured.data.category ?? ''}
+            >
+              {featured.data.heroImage && (
+                <div class="story-card-image featured-image">
+                  <Image
+                    src={featured.data.heroImage}
+                    alt={featured.data.title}
+                    width={800}
+                    height={520}
+                    class="card-img"
+                  />
+                </div>
+              )}
+              <div class="story-card-content">
+                <div class="featured-label"><span>Featured</span></div>
+                {featured.data.category && (
+                  <span class="story-card-tag">{featured.data.category}</span>
                 )}
-                <div class="card-body">
-                  {post.data.category && (
-                    <span class="category-badge">{post.data.category}</span>
+                <h2 class="story-card-title featured-title">{featured.data.title}</h2>
+                <p class="story-card-excerpt">{featured.data.description}</p>
+                <div class="story-card-meta">
+                  <span class="story-card-date">
+                    <FormattedDate date={featured.data.pubDate} />
+                  </span>
+                  {featured.data.readTime && (
+                    <span class="story-card-read-time">{featured.data.readTime}</span>
                   )}
-                  <h4 class="card-title">{post.data.title}</h4>
-                  <p class="card-desc">{post.data.description}</p>
-                  <span class="card-date">
+                </div>
+              </div>
+            </a>
+          )}
+
+          <!-- Regular cards -->
+          {rest.map(post => (
+            <a
+              href={`/blog/${post.id}/`}
+              class="story-card"
+              data-category={post.data.category ?? ''}
+            >
+              {post.data.heroImage && (
+                <div class="story-card-image">
+                  <Image
+                    src={post.data.heroImage}
+                    alt={post.data.title}
+                    width={480}
+                    height={300}
+                    class="card-img"
+                  />
+                </div>
+              )}
+              <div class="story-card-content">
+                {post.data.category && (
+                  <span class="story-card-tag">{post.data.category}</span>
+                )}
+                <h3 class="story-card-title">{post.data.title}</h3>
+                <p class="story-card-excerpt">{post.data.description}</p>
+                <div class="story-card-meta">
+                  <span class="story-card-date">
                     <FormattedDate date={post.data.pubDate} />
                   </span>
+                  {post.data.readTime && (
+                    <span class="story-card-read-time">{post.data.readTime}</span>
+                  )}
                 </div>
-              </a>
-            ))}
-          </div>
-          {posts.length > 9 && (
-            <div class="view-all-wrap">
-              <a href="/blog" class="view-all-btn">View all posts →</a>
-            </div>
-          )}
-        </section>
-      )}
+              </div>
+            </a>
+          ))}
+        </div>
+
+        <p class="no-results" id="noResults" style="display:none">
+          No posts in this category yet.
+        </p>
+      </section>
+
+      <!-- ── Newsletter ── -->
+      <section class="newsletter" id="newsletter">
+        <div class="newsletter-inner site-wrapper">
+          <h2 class="newsletter-title">Get insights delivered</h2>
+          <p class="newsletter-desc">Weekly perspectives on AI Product Management. No fluff, just practical lessons.</p>
+          <form class="newsletter-form" onsubmit="return false;">
+            <input type="email" placeholder="you@example.com" required aria-label="Email address" />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </section>
 
     </main>
     <Footer />
+
+    <script>
+      const btns  = document.querySelectorAll<HTMLButtonElement>('.filter-tag');
+      const cards = document.querySelectorAll<HTMLElement>('.story-card');
+      const noResults = document.getElementById('noResults')!;
+
+      btns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.dataset.filter ?? 'all';
+          let visible = 0;
+          cards.forEach(card => {
+            const match = filter === 'all' || card.dataset.category === filter;
+            (card as HTMLElement).style.display = match ? '' : 'none';
+            if (match) visible++;
+          });
+          noResults.style.display = visible === 0 ? '' : 'none';
+        });
+      });
+    </script>
   </body>
 </html>
 
 <style>
-  main { padding-bottom: 4rem; }
-
-  /* ── Featured ── */
-  .featured-section { padding-top: 3rem; padding-bottom: 3rem; }
-
-  .featured-card {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 2.5rem;
-    align-items: center;
-    background: var(--card-bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-card);
-    overflow: hidden;
-    text-decoration: none;
-    color: inherit;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  /* ── Hero ── */
+  .hero {
+    padding: 4rem 0 3rem;
+    max-width: var(--max-width);
   }
-  .featured-card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+  .hero-title {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin-bottom: 1rem;
   }
-
-  .featured-img-wrap {
-    aspect-ratio: 16/10;
-    overflow: hidden;
-  }
-  .featured-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s ease;
-  }
-  .featured-card:hover .featured-img { transform: scale(1.03); }
-
-  .featured-content {
-    padding: 2.5rem 2.5rem 2.5rem 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  .featured-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    line-height: 1.2;
-    color: var(--text);
-    margin: 0;
-  }
-
-  .featured-desc {
-    font-size: 1rem;
+  .hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 300;
     color: var(--text-secondary);
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    max-width: 640px;
+    line-height: 1.6;
     margin: 0;
   }
 
-  .featured-meta {
-    font-size: 0.85rem;
-    color: var(--text-muted);
-    margin-top: 0.25rem;
+  /* ── Filters ── */
+  .filters-wrap {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2.5rem;
   }
-
-  /* ── Recent Posts ── */
-  .recent-section { padding-top: 1rem; }
-
-  .section-label {
-    font-family: var(--font-sans);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 1.5rem;
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
   }
+  .filter-tag {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .filter-tag:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+  }
+  .filter-tag.active {
+    background: var(--text);
+    border-color: var(--text);
+    color: var(--bg);
+  }
+  [data-theme="dark"] .filter-tag.active { color: #1a1a1a; }
 
-  .posts-grid {
+  /* ── Stories grid ── */
+  .stories { padding-bottom: 2rem; }
+  .stories-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1.75rem;
   }
 
-  .post-card {
+  /* ── Base card ── */
+  .story-card {
     display: flex;
     flex-direction: column;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: var(--radius-card);
+    border-radius: 12px;
     overflow: hidden;
     text-decoration: none;
     color: inherit;
     transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
-  .post-card:hover {
-    box-shadow: var(--shadow-md);
+  .story-card:hover {
+    box-shadow: var(--shadow-lg);
     transform: translateY(-2px);
   }
 
-  .card-img-wrap {
+  .story-card-image {
     aspect-ratio: 16/10;
     overflow: hidden;
   }
@@ -208,72 +258,177 @@ const recent = posts.filter(p => p.id !== featured?.id).slice(0, 8);
     object-fit: cover;
     transition: transform 0.3s ease;
   }
-  .post-card:hover .card-img { transform: scale(1.03); }
+  .story-card:hover .card-img { transform: scale(1.03); }
 
-  .card-body {
-    padding: 1.1rem 1.25rem 1.25rem;
+  .story-card-content {
+    padding: 1.25rem 1.5rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
     flex: 1;
   }
 
-  .card-title {
-    font-size: 1rem;
-    font-weight: 700;
+  .story-card-title {
+    font-size: 1.375rem;
+    font-weight: 500;
     line-height: 1.3;
     color: var(--text);
-    margin: 0;
+    margin: 0 0 0.6rem;
   }
 
-  .card-desc {
-    font-size: 0.875rem;
+  .story-card-excerpt {
+    font-size: 0.9375rem;
     color: var(--text-secondary);
+    line-height: 1.55;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    margin: 0;
+    margin: 0 0 1rem;
     flex: 1;
   }
 
-  .card-date {
-    font-size: 0.8rem;
-    color: var(--text-muted);
+  .story-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
     margin-top: auto;
   }
+  .story-card-date,
+  .story-card-read-time {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+  .story-card-read-time::before { content: '·'; margin-right: 0.75rem; }
 
-  .view-all-wrap {
-    margin-top: 2.5rem;
-    text-align: center;
+  /* ── Featured card ── */
+  .featured-card {
+    grid-column: span 3;
+    flex-direction: row;
   }
-  .view-all-btn {
-    display: inline-block;
-    font-weight: 600;
-    font-size: 0.9375rem;
-    color: var(--accent);
+
+  .featured-image {
+    flex: 1.4;
+    aspect-ratio: unset;
+    min-height: 320px;
+  }
+
+  .featured-card .story-card-content {
+    flex: 1;
+    padding: 2.5rem;
+    justify-content: center;
+  }
+
+  .featured-label {
+    margin-bottom: 0.75rem;
+  }
+  .featured-label span {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 0.6rem 1.5rem;
-    text-decoration: none;
-    transition: border-color 0.2s, background 0.2s;
+    border-radius: 4px;
+    padding: 0.2rem 0.55rem;
   }
-  .view-all-btn:hover {
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 6%, transparent);
+
+  .featured-title {
+    font-size: 2rem !important;
+    line-height: 1.2 !important;
+    margin-bottom: 0.85rem !important;
   }
+
+  .featured-card .story-card-excerpt {
+    -webkit-line-clamp: 4;
+    font-size: 1rem;
+  }
+
+  /* ── No results ── */
+  .no-results {
+    grid-column: span 4;
+    text-align: center;
+    color: var(--text-muted);
+    padding: 3rem 0;
+    font-size: 1rem;
+  }
+
+  /* ── Newsletter ── */
+  .newsletter {
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    margin-top: 4rem;
+  }
+  .newsletter-inner {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    max-width: 560px;
+  }
+  .newsletter-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+  }
+  .newsletter-desc {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.75rem;
+  }
+  .newsletter-form {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .newsletter-form input {
+    flex: 1;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 1rem;
+    padding: 0.65rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .newsletter-form input:focus { border-color: var(--accent); }
+  .newsletter-form button {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 0.65rem 1.5rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .newsletter-form button:hover { background: var(--accent-hover); }
 
   /* ── Responsive ── */
-  @media (max-width: 1024px) {
-    .posts-grid { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 1100px) {
+    .stories-grid { grid-template-columns: repeat(3, 1fr); }
+    .featured-card { grid-column: span 3; }
   }
   @media (max-width: 768px) {
-    .featured-card { grid-template-columns: 1fr; }
-    .featured-content { padding: 1.5rem; }
-    .posts-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .stories-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .featured-card {
+      grid-column: span 2;
+      flex-direction: column;
+    }
+    .featured-image {
+      flex: unset;
+      aspect-ratio: 16/10;
+      min-height: unset;
+    }
+    .featured-card .story-card-content { padding: 1.5rem; }
+    .featured-title { font-size: 1.5rem !important; }
+    .newsletter-form { flex-direction: column; }
   }
   @media (max-width: 480px) {
-    .posts-grid { grid-template-columns: 1fr; }
-    .featured-section { padding-top: 1.5rem; }
+    .stories-grid { grid-template-columns: 1fr; }
+    .featured-card { grid-column: span 1; }
+    .hero-subtitle { font-size: 1.0625rem; }
   }
 </style>

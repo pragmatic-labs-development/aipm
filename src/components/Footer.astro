@@ -1,56 +1,61 @@
 ---
-import { SITE_TITLE } from '../consts';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <div class="footer-inner site-wrapper">
-    <div class="footer-brand">
-      <span class="footer-logo">{SITE_TITLE}</span>
-      <p class="footer-tagline">Practical AI for Product Managers</p>
+    <div class="footer-top">
+      <a href="/" class="footer-logo">
+        <img src="/aipm-logo.webp" alt="" width="32" height="32" class="footer-logo-img" />
+        <span class="footer-logo-text">AIPM<span class="footer-logo-accent">.blog</span></span>
+      </a>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+        <a href="/rss.xml">RSS</a>
+      </nav>
     </div>
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <a href="/blog">Blog</a>
-      <a href="/about">About</a>
-    </nav>
-    <p class="footer-copy">&copy; {year} AIPM. All rights reserved.</p>
+    <div class="footer-bottom">
+      <p class="footer-copy">&copy; {year} AIPM.blog. All rights reserved.</p>
+    </div>
   </div>
 </footer>
 
 <style>
   .site-footer {
-    margin-top: 5rem;
-    border-top: 1px solid var(--border);
-    padding: 3rem 0;
     background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+    padding: 3rem 0 2rem;
+    margin-top: 5rem;
   }
 
-  .footer-inner {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
+  .footer-top {
+    display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
     gap: 2rem;
   }
 
   .footer-logo {
-    font-family: var(--font-serif);
-    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .footer-logo-img { height: 32px; width: auto; }
+  .footer-logo-text {
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.2rem;
     font-weight: 700;
     letter-spacing: -0.03em;
     color: var(--text);
-    display: block;
-    margin-bottom: 0.25rem;
   }
-
-  .footer-tagline {
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    margin: 0;
-  }
+  .footer-logo-accent { color: var(--accent); }
 
   .footer-nav {
     display: flex;
-    gap: 1.75rem;
+    gap: 2rem;
   }
   .footer-nav a {
     font-size: 0.9rem;
@@ -60,18 +65,11 @@ const year = new Date().getFullYear();
   }
   .footer-nav a:hover { color: var(--text); }
 
-  .footer-copy {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin: 0;
-    white-space: nowrap;
-  }
+  .footer-bottom { border-top: 1px solid var(--border-light); padding-top: 1.5rem; }
+  .footer-copy { font-size: 0.85rem; color: var(--text-muted); margin: 0; }
 
   @media (max-width: 640px) {
-    .footer-inner {
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
-    }
-    .footer-copy { order: 3; }
+    .footer-top { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    .footer-nav { gap: 1.5rem; }
   }
 </style>

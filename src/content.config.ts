@@ -25,6 +25,7 @@ const blog = defineCollection({
 			]).optional(),
 			tags: z.array(z.string()).optional(),
 			featured: z.boolean().optional(),
+			readTime: z.string().optional(), // e.g. "8 min read"
 		}),
 });
 
